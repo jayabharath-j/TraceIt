@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}
+Daily Progress | TraceIt
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h1 class="fw-bold">
+                Daily Progress
+            </h1>
+
+            <p class="text-muted mb-0">
+                Track your fitness progress over time.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('add_progress') }}"
+            class="btn btn-primary"
+        >
+            + Add Progress
+        </a>
+
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if progress_records %}
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Weight
+                                </th>
+
+                                <th>
+                                    BMI
+                                </th>
+
+                                <th>
+                                    Water
+                                </th>
+
+                                <th>
+                                    Sleep
+                                </th>
+
+                                <th>
+                                    Steps
+                                </th>
+
+                                <th>
+                                    Waist
+                                </th>
+
+                                <th>
+                                    Chest
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for record in progress_records %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ record.date }}
+                                    </td>
+
+                                    <td>
+                                        {{ record.weight_kg }} kg
+                                    </td>
+
+                                    <td>
+                                        {{ record.bmi }}
+                                    </td>
+
+                                    <td>
+                                        {{ record.water_liters }} L
+                                    </td>
+
+                                    <td>
+                                        {{ record.sleep_hours }} hrs
+                                    </td>
+
+                                    <td>
+                                        {{ record.steps }}
+                                    </td>
+
+                                    <td>
+                                        {% if record.waist_cm %}
+                                            {{ record.waist_cm }} cm
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if record.chest_cm %}
+                                            {{ record.chest_cm }} cm
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex gap-2">
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'edit_progress',
+                                                    progress_id=record.id
+                                                ) }}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Edit
+                                            </a>
+
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for(
+                                                    'delete_progress',
+                                                    progress_id=record.id
+                                                ) }}"
+                                                onsubmit="return confirm(
+                                                    'Are you sure you want to delete this record?'
+                                                );"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <h4 class="fw-bold">
+                    No progress records yet
+                </h4>
+
+                <p class="text-muted">
+                    Start tracking your daily fitness progress.
+                </p>
+
+                <a
+                    href="{{ url_for('add_progress') }}"
+                    class="btn btn-primary"
+                >
+                    Add Your First Record
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

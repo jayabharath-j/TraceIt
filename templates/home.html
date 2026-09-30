@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+TraceIt
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="row align-items-center min-vh-75">
+
+            <div class="col-lg-7">
+
+                <span class="badge bg-primary mb-3">
+                    Your Fitness Journey
+                </span>
+
+                <h1 class="display-4 fw-bold">
+                    Track your fitness.
+                    <br>
+                    Reach your goals.
+                </h1>
+
+                <p class="lead text-muted mt-3">
+                    Track workouts, weight, nutrition, water,
+                    sleep and daily progress in one place.
+                </p>
+
+                <div class="mt-4">
+
+                    <a
+                        href="{{ url_for('register') }}"
+                        class="btn btn-primary btn-lg me-2"
+                    >
+                        Get Started
+                    </a>
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="btn btn-outline-dark btn-lg"
+                    >
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5 mt-5 mt-lg-0">
+
+                <div class="card shadow-lg border-0">
+
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold">
+                            Your Progress
+                        </h4>
+
+                        <hr>
+
+                        <div class="row text-center">
+
+                            <div class="col-4">
+
+                                <h3 class="fw-bold">
+                                    72
+                                </h3>
+
+                                <small class="text-muted">
+                                    Target KG
+                                </small>
+
+                            </div>
+
+                            <div class="col-4">
+
+                                <h3 class="fw-bold">
+                                    22.4
+                                </h3>
+
+                                <small class="text-muted">
+                                    BMI
+                                </small>
+
+                            </div>
+
+                            <div class="col-4">
+
+                                <h3 class="fw-bold">
+                                    8K
+                                </h3>
+
+                                <small class="text-muted">
+                                    Steps
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

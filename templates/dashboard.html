@@ -1,0 +1,1126 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Dashboard | TraceIt
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container dashboard-container">
+
+
+    <!-- ==================================================
+         DASHBOARD HEADER
+    ================================================== -->
+
+    <div class="dashboard-hero mb-4">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                YOUR FITNESS DASHBOARD
+            </span>
+
+            <h1 class="dashboard-title">
+                Welcome back, {{ user_name }} 👋
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Track your progress, nutrition and workouts
+                all in one place.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-header-actions">
+
+            <a
+                href="{{ url_for('add_progress') }}"
+                class="btn btn-primary"
+            >
+                <span>＋</span>
+                Add Progress
+            </a>
+
+            <a
+                href="{{ url_for('add_food') }}"
+                class="btn btn-success"
+            >
+                <span>＋</span>
+                Add Food
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         QUICK ACTIONS
+    ================================================== -->
+
+    <div class="section-heading">
+
+        <div>
+
+            <h5>
+                Quick Actions
+            </h5>
+
+            <p>
+                Manage your fitness journey
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- Goals -->
+
+        <div class="col-6 col-md-3">
+
+            <a
+                href="{{ url_for('goals') }}"
+                class="quick-action"
+            >
+
+                <div class="card quick-action-card">
+
+                    <div class="card-body">
+
+                        <div class="icon-circle icon-blue">
+                            🎯
+                        </div>
+
+                        <h6>
+                            Fitness Goals
+                        </h6>
+
+                        <small>
+                            Manage your targets
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Progress -->
+
+        <div class="col-6 col-md-3">
+
+            <a
+                href="{{ url_for('progress') }}"
+                class="quick-action"
+            >
+
+                <div class="card quick-action-card">
+
+                    <div class="card-body">
+
+                        <div class="icon-circle icon-purple">
+                            📈
+                        </div>
+
+                        <h6>
+                            Progress
+                        </h6>
+
+                        <small>
+                            Track your body
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Nutrition -->
+
+        <div class="col-6 col-md-3">
+
+            <a
+                href="{{ url_for('food') }}"
+                class="quick-action"
+            >
+
+                <div class="card quick-action-card">
+
+                    <div class="card-body">
+
+                        <div class="icon-circle icon-green">
+                            🍎
+                        </div>
+
+                        <h6>
+                            Nutrition
+                        </h6>
+
+                        <small>
+                            Track your food
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Workouts -->
+
+        <div class="col-6 col-md-3">
+
+            <a
+                href="{{ url_for('workouts') }}"
+                class="quick-action"
+            >
+
+                <div class="card quick-action-card">
+
+                    <div class="card-body">
+
+                        <div class="icon-circle icon-orange">
+                            🏋️
+                        </div>
+
+                        <h6>
+                            Workouts
+                        </h6>
+
+                        <small>
+                            Track your training
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         MAIN STATS
+    ================================================== -->
+
+    <div class="section-heading">
+
+        <div>
+
+            <h5>
+                Your Overview
+            </h5>
+
+            <p>
+                Current body and goal statistics
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- Current Weight -->
+
+        <div class="col-6 col-lg-3">
+
+            <div class="card stat-card stat-blue h-100">
+
+                <div class="card-body">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            ⚖️
+                        </div>
+
+                        <span class="stat-label">
+                            Current Weight
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {% if current_weight is not none %}
+
+                            {{ "%.1f"|format(current_weight) }}
+
+                            <small>
+                                kg
+                            </small>
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Target Weight -->
+
+        <div class="col-6 col-lg-3">
+
+            <div class="card stat-card stat-green h-100">
+
+                <div class="card-body">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            🎯
+                        </div>
+
+                        <span class="stat-label">
+                            Target Weight
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {% if target_weight is not none %}
+
+                            {{ "%.1f"|format(target_weight) }}
+
+                            <small>
+                                kg
+                            </small>
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Weight Remaining -->
+
+        <div class="col-6 col-lg-3">
+
+            <div class="card stat-card stat-orange h-100">
+
+                <div class="card-body">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            📉
+                        </div>
+
+                        <span class="stat-label">
+                            Weight Remaining
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {% if weight_remaining is not none %}
+
+                            {{ "%.1f"|format(weight_remaining) }}
+
+                            <small>
+                                kg
+                            </small>
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BMI -->
+
+        <div class="col-6 col-lg-3">
+
+            <div class="card stat-card stat-purple h-100">
+
+                <div class="card-body">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            📊
+                        </div>
+
+                        <span class="stat-label">
+                            BMI
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {% if bmi is not none %}
+
+                            {{ "%.1f"|format(bmi) }}
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         NUTRITION
+    ================================================== -->
+
+    <div class="section-heading">
+
+        <div>
+
+            <h5>
+                Today's Nutrition
+            </h5>
+
+            <p>
+                Monitor your daily calorie and protein intake
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('food') }}"
+            class="section-link"
+        >
+            View Nutrition →
+        </a>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- Calories -->
+
+        <div class="col-lg-6">
+
+            <div class="card nutrition-card h-100">
+
+                <div class="card-body">
+
+                    <div class="nutrition-header">
+
+                        <div class="nutrition-title">
+
+                            <div class="icon-circle icon-red">
+                                🔥
+                            </div>
+
+                            <div>
+
+                                <h5>
+                                    Calories
+                                </h5>
+
+                                <small>
+                                    Today's intake
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="nutrition-value">
+
+                            <strong>
+                                {{ "%.0f"|format(calories_consumed) }}
+                            </strong>
+
+                            <span>
+                                / {{ "%.0f"|format(calorie_target) }} kcal
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if calorie_target > 0 %}
+
+                    <div class="progress progress-modern">
+
+                        <div
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            style="width: {{ calorie_percent }}%;"
+                            aria-valuenow="{{ calorie_percent }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+
+                    </div>
+
+                    <div class="progress-meta">
+
+                        <span>
+                            {{ calorie_percent }}% completed
+                        </span>
+
+                        <span>
+                            Daily target
+                        </span>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-inline">
+                        Set your fitness goals to see your calorie target.
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Protein -->
+
+        <div class="col-lg-6">
+
+            <div class="card nutrition-card h-100">
+
+                <div class="card-body">
+
+                    <div class="nutrition-header">
+
+                        <div class="nutrition-title">
+
+                            <div class="icon-circle icon-green">
+                                💪
+                            </div>
+
+                            <div>
+
+                                <h5>
+                                    Protein
+                                </h5>
+
+                                <small>
+                                    Today's intake
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="nutrition-value">
+
+                            <strong>
+                                {{ "%.1f"|format(protein_consumed) }}
+                            </strong>
+
+                            <span>
+                                / {{ "%.1f"|format(protein_target) }} g
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if protein_target > 0 %}
+
+                    <div class="progress progress-modern">
+
+                        <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: {{ protein_percent }}%;"
+                            aria-valuenow="{{ protein_percent }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+
+                    </div>
+
+                    <div class="progress-meta">
+
+                        <span>
+                            {{ protein_percent }}% completed
+                        </span>
+
+                        <span>
+                            Daily target
+                        </span>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-inline">
+                        Set your fitness goals to see your protein target.
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         DAILY HABITS
+    ================================================== -->
+
+    <div class="section-heading">
+
+        <div>
+
+            <h5>
+                Daily Habits
+            </h5>
+
+            <p>
+                Your latest recorded activity
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('progress') }}"
+            class="section-link"
+        >
+            View Progress →
+        </a>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- Water -->
+
+        <div class="col-md-4">
+
+            <div class="card habit-card h-100">
+
+                <div class="card-body">
+
+                    <div class="habit-icon icon-blue">
+                        💧
+                    </div>
+
+                    <div>
+
+                        <span class="habit-label">
+                            Water
+                        </span>
+
+                        <div class="habit-value">
+
+                            {{ "%.1f"|format(water) }}
+
+                            <small>
+                                L
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Sleep -->
+
+        <div class="col-md-4">
+
+            <div class="card habit-card h-100">
+
+                <div class="card-body">
+
+                    <div class="habit-icon icon-purple">
+                        😴
+                    </div>
+
+                    <div>
+
+                        <span class="habit-label">
+                            Sleep
+                        </span>
+
+                        <div class="habit-value">
+
+                            {{ "%.1f"|format(sleep) }}
+
+                            <small>
+                                hrs
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Steps -->
+
+        <div class="col-md-4">
+
+            <div class="card habit-card h-100">
+
+                <div class="card-body">
+
+                    <div class="habit-icon icon-orange">
+                        🚶
+                    </div>
+
+                    <div>
+
+                        <span class="habit-label">
+                            Steps
+                        </span>
+
+                        <div class="habit-value">
+
+                            {{ "{:,}".format(steps) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         GOAL PROGRESS
+    ================================================== -->
+
+    <div class="card goal-progress-card mb-4">
+
+        <div class="card-body">
+
+            <div class="goal-header">
+
+                <div class="nutrition-title">
+
+                    <div class="icon-circle icon-blue">
+                        🎯
+                    </div>
+
+                    <div>
+
+                        <h5>
+                            Goal Progress
+                        </h5>
+
+                        <small>
+                            Progress toward your target weight
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <strong class="goal-percentage">
+                    {{ goal_progress }}%
+                </strong>
+
+            </div>
+
+
+            <div class="progress progress-large">
+
+                <div
+                    class="progress-bar bg-success"
+                    role="progressbar"
+                    style="width: {{ goal_progress }}%;"
+                    aria-valuenow="{{ goal_progress }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                ></div>
+
+            </div>
+
+
+            <div class="progress-meta">
+
+                <span>
+                    Starting weight → Target weight
+                </span>
+
+                <span>
+                    {{ goal_progress }}%
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         RECENT WORKOUTS
+    ================================================== -->
+
+    <div class="card recent-workouts-card mb-4">
+
+        <div class="card-body">
+
+            <div class="section-heading mb-3">
+
+                <div>
+
+                    <h5>
+                        🏋️ Recent Workouts
+                    </h5>
+
+                    <p>
+                        Your latest training sessions
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('workouts') }}"
+                    class="btn btn-sm btn-outline-primary"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if recent_workouts %}
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Workout
+                                </th>
+
+                                <th>
+                                    Duration
+                                </th>
+
+                                <th class="text-end">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for workout in recent_workouts %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ workout.workout_date }}
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+                                            {{ workout.workout_name }}
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="duration-badge">
+                                            {{ workout.duration_minutes }} min
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <a
+                                            href="{{ url_for('workout_detail', workout_id=workout.id) }}"
+                                            class="btn btn-sm btn-outline-secondary"
+                                        >
+                                            View
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🏋️
+                    </div>
+
+                    <h6>
+                        No workouts yet
+                    </h6>
+
+                    <p>
+                        Start tracking your training sessions.
+                    </p>
+
+                    <a
+                        href="{{ url_for('add_workout') }}"
+                        class="btn btn-primary"
+                    >
+                        Add Your First Workout
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         BOTTOM ACTIONS
+    ================================================== -->
+
+    <div class="section-heading">
+
+        <div>
+
+            <h5>
+                Keep Going 💪
+            </h5>
+
+            <p>
+                Continue building your fitness journey
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-3">
+
+
+        <!-- Progress -->
+
+        <div class="col-md-4">
+
+            <div class="card action-card h-100">
+
+                <div class="card-body">
+
+                    <div class="icon-circle icon-blue mb-3">
+                        📊
+                    </div>
+
+                    <h5>
+                        Track Progress
+                    </h5>
+
+                    <p>
+                        Record your weight, water, sleep and daily activity.
+                    </p>
+
+                    <a
+                        href="{{ url_for('add_progress') }}"
+                        class="btn btn-outline-primary"
+                    >
+                        Add Progress
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Nutrition -->
+
+        <div class="col-md-4">
+
+            <div class="card action-card h-100">
+
+                <div class="card-body">
+
+                    <div class="icon-circle icon-green mb-3">
+                        🍎
+                    </div>
+
+                    <h5>
+                        Track Nutrition
+                    </h5>
+
+                    <p>
+                        Add meals and automatically calculate nutrition.
+                    </p>
+
+                    <a
+                        href="{{ url_for('add_food') }}"
+                        class="btn btn-outline-success"
+                    >
+                        Add Food
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Workout -->
+
+        <div class="col-md-4">
+
+            <div class="card action-card h-100">
+
+                <div class="card-body">
+
+                    <div class="icon-circle icon-orange mb-3">
+                        🏋️
+                    </div>
+
+                    <h5>
+                        Track Workout
+                    </h5>
+
+                    <p>
+                        Record workouts, exercises, sets, reps and weights.
+                    </p>
+
+                    <a
+                        href="{{ url_for('add_workout') }}"
+                        class="btn btn-outline-dark"
+                    >
+                        Add Workout
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

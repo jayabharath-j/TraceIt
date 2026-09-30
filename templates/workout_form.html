@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Workout | TraceIt
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7 col-md-9">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="fw-bold mb-4">
+                        🏋️ Add Workout
+                    </h2>
+
+                    <form method="POST">
+
+                        <!-- Workout Date -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="workout_date"
+                                class="form-label"
+                            >
+                                Workout Date
+                            </label>
+
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="workout_date"
+                                name="workout_date"
+                                value="{{ request.form.get('workout_date', '') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Workout Name -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="workout_name"
+                                class="form-label"
+                            >
+                                Workout Name
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="workout_name"
+                                name="workout_name"
+                                maxlength="100"
+                                placeholder="Example: Push Day"
+                                value="{{ request.form.get('workout_name', '') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Duration -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="duration_minutes"
+                                class="form-label"
+                            >
+                                Duration (minutes)
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="duration_minutes"
+                                name="duration_minutes"
+                                min="1"
+                                placeholder="Example: 60"
+                                value="{{ request.form.get('duration_minutes', '') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Add Workout
+                            </button>
+
+                            <a
+                                href="{{ url_for('workouts') }}"
+                                class="btn btn-secondary"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

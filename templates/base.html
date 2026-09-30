@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- ==================================================
+         DOCUMENT SETUP
+    ================================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="TraceIt - Track your fitness goals, nutrition, workouts and progress."
+    >
+
+    <title>
+        {% block title %}
+        TraceIt
+        {% endblock %}
+    </title>
+
+
+    <!-- ==================================================
+         FAVICON
+    ================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ url_for('static', filename='images/logo.png') }}"
+    >
+
+
+    <!-- ==================================================
+         BOOTSTRAP
+    ================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- ==================================================
+         CUSTOM CSS
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+
+    <!-- ==================================================
+         CHART.JS
+    ================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==================================================
+         NAVBAR
+    ================================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+
+        <div class="container">
+
+
+            <!-- BRAND -->
+
+            <a
+                class="navbar-brand d-flex align-items-center fw-bold"
+                href="{{ url_for('dashboard') }}"
+            >
+
+                <img
+                    src="{{ url_for('static', filename='images/logo.png') }}"
+                    alt="TraceIt Logo"
+                    width="38"
+                    height="38"
+                    class="me-2"
+                    style="object-fit: contain;"
+                >
+
+            <div class="d-flex flex-column lh-1">
+                    <span>TraceIt</span>
+                <small
+                    class="fw-normal opacity-75"
+                    style="font-size: 0.62rem; letter-spacing: 0.5px;"
+                >
+                    Track. Train. Transform.
+                </small>
+            </div>
+
+            </a>
+
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- NAVIGATION -->
+
+            <div
+                class="collapse navbar-collapse"
+                id="mainNavbar"
+            >
+
+                {% if session.get("user_id") %}
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                    <!-- DASHBOARD -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('dashboard') }}"
+                        >
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <!-- GOALS -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('goals') }}"
+                        >
+                            Goals
+                        </a>
+
+                    </li>
+
+
+                    <!-- PROGRESS -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('progress') }}"
+                        >
+                            Progress
+                        </a>
+
+                    </li>
+
+
+                    <!-- NUTRITION -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('food') }}"
+                        >
+                            Nutrition
+                        </a>
+
+                    </li>
+
+
+                    <!-- WORKOUTS -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('workouts') }}"
+                        >
+                            Workouts
+                        </a>
+
+                    </li>
+
+
+                    <!-- CHARTS -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('charts') }}"
+                        >
+                            Charts
+                        </a>
+
+                    </li>
+
+
+                    <!-- ADMIN -->
+
+                    {% if session.get("user_role") == "admin" %}
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('admin_dashboard') }}"
+                        >
+                            Admin
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                    <!-- THEME TOGGLE -->
+
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-light theme-toggle"
+                            id="themeToggle"
+                            aria-label="Toggle theme"
+                            title="Toggle dark/light mode"
+                        >
+                            🌙
+                        </button>
+
+                    </li>
+
+
+                    <!-- LOGOUT -->
+
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+
+                        <a
+                            class="btn btn-outline-light btn-sm"
+                            href="{{ url_for('logout') }}"
+                        >
+                            Logout
+                        </a>
+
+                    </li>
+
+                </ul>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ==================================================
+         FLASH MESSAGES
+    ================================================== -->
+
+    <div class="container mt-3">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="alert alert-{{ category }} alert-dismissible fade show"
+                        role="alert"
+                    >
+
+                        {{ message }}
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"
+                        ></button>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+    </div>
+
+
+
+    <!-- ==================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+
+    <!-- ==================================================
+         BOOTSTRAP JAVASCRIPT
+    ================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+
+    <!-- ==================================================
+         CUSTOM JAVASCRIPT
+    ================================================== -->
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
+
+
+    {% block scripts %}
+
+    {% endblock %}
+
+</body>
+
+</html>

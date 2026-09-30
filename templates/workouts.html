@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+Workouts | TraceIt
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                🏋️ Workouts
+            </h2>
+
+            <p class="text-muted mb-0">
+                Track your workouts, exercises and sets.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('add_workout') }}"
+            class="btn btn-primary"
+        >
+            + Add Workout
+        </a>
+
+    </div>
+
+
+    <!-- Workout List -->
+
+    {% if workouts %}
+
+        <div class="row g-4">
+
+            {% for workout in workouts %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold">
+                                {{ workout.workout_name }}
+                            </h5>
+
+                            <p class="text-muted mb-2">
+
+                                📅 {{ workout.workout_date }}
+
+                            </p>
+
+                            <p class="mb-3">
+
+                                ⏱️
+                                {{ workout.duration_minutes }}
+                                minutes
+
+                            </p>
+
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="{{ url_for(
+                                        'workout_detail',
+                                        workout_id=workout.id
+                                    ) }}"
+                                    class="btn btn-primary"
+                                >
+                                    View Workout
+                                </a>
+
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_workout',
+                                        workout_id=workout.id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Are you sure you want to delete this workout?'
+                                    );"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-outline-danger"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- Empty State -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <h4>
+                    No workouts yet
+                </h4>
+
+                <p class="text-muted">
+                    Start tracking your workouts today.
+                </p>
+
+                <a
+                    href="{{ url_for('add_workout') }}"
+                    class="btn btn-primary"
+                >
+                    Add Your First Workout
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

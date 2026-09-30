@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ workout.workout_name }} | TraceIt
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                🏋️ {{ workout.workout_name }}
+            </h2>
+
+            <p class="text-muted mb-0">
+                📅 {{ workout.workout_date }}
+                &nbsp; | &nbsp;
+                ⏱️ {{ workout.duration_minutes }} minutes
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('workouts') }}"
+            class="btn btn-secondary"
+        >
+            ← Back to Workouts
+        </a>
+
+    </div>
+
+
+    <!-- Add Exercise -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-3">
+                Add Exercise
+            </h4>
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'add_exercise',
+                    workout_id=workout.id
+                ) }}"
+                class="row g-3"
+            >
+
+                <div class="col-md-9">
+
+                    <label
+                        for="exercise_name"
+                        class="form-label"
+                    >
+                        Exercise Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="exercise_name"
+                        name="exercise_name"
+                        maxlength="100"
+                        placeholder="Example: Bench Press"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                        style="width: 86px;"
+                    >
+                        + Add Exercise
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Exercises -->
+
+    {% if exercises %}
+
+        {% for exercise in exercises %}
+
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body">
+
+                    <!-- Exercise Header -->
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="fw-bold mb-0">
+                            {{ exercise.exercise_name }}
+                        </h4>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'delete_exercise',
+                                exercise_id=exercise.id
+                            ) }}"
+                            onsubmit="return confirm(
+                                'Delete this exercise and all its sets?'
+                            );"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                style="width: 86px;"
+                            >
+                                Delete Exercise
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- Add Set -->
+
+                    <div class="bg-light rounded p-3 mb-4">
+
+                        <h6 class="fw-bold mb-3">
+                            Add Set
+                        </h6>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'add_exercise_set',
+                                exercise_id=exercise.id
+                            ) }}"
+                            class="row g-3"
+                        >
+
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Reps
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    name="reps"
+                                    min="1"
+                                    placeholder="Example: 10"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Weight (kg)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    name="weight_kg"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="Example: 40"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-4 d-flex align-items-end">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary w-100"
+                                >
+                                    + Add Set
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- Sets -->
+
+                    {% if exercise.sets %}
+
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered align-middle">
+
+                                <thead class="table-dark">
+
+                                    <tr>
+
+                                        <th>
+                                            Set
+                                        </th>
+
+                                        <th>
+                                            Reps
+                                        </th>
+
+                                        <th>
+                                            Weight
+                                        </th>
+
+                                        <th>
+                                            Actions
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    {% for set in exercise.sets %}
+
+                                        <tr>
+
+                                            <td>
+                                                Set {{ set.set_number }}
+                                            </td>
+
+                                            <td>
+                                                {{ set.reps }}
+                                            </td>
+
+                                            <td>
+                                                {{ set.weight_kg }} kg
+                                            </td>
+
+                                            <td>
+
+                                                <div class="d-flex gap-2 flex-wrap">
+
+                                                    <!-- Edit Set -->
+
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ url_for(
+                                                            'edit_exercise_set',
+                                                            set_id=set.id
+                                                        ) }}"
+                                                        class="d-flex gap-2"
+                                                    >
+
+                                                        <input
+                                                            type="number"
+                                                            name="reps"
+                                                            class="form-control form-control-sm"
+                                                            value="{{ set.reps }}"
+                                                            min="1"
+                                                            style="width: 80px;"
+                                                            required
+                                                        >
+
+                                                        <input
+                                                            type="number"
+                                                            name="weight_kg"
+                                                            class="form-control form-control-sm"
+                                                            value="{{ set.weight_kg }}"
+                                                            min="0"
+                                                            step="0.01"
+                                                            style="width: 100px;"
+                                                            required
+                                                        >
+
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-sm btn-outline-primary"
+                                                        >
+                                                            Update
+                                                        </button>
+
+                                                    </form>
+
+
+                                                    <!-- Delete Set -->
+
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ url_for(
+                                                            'delete_exercise_set',
+                                                            set_id=set.id
+                                                        ) }}"
+                                                        onsubmit="return confirm(
+                                                            'Delete this set?'
+                                                        );"
+                                                    >
+
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-sm btn-outline-danger"
+                                                        >
+                                                            Delete
+                                                        </button>
+
+                                                    </form>
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {% else %}
+
+                        <p class="text-muted mb-0">
+                            No sets added yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <h5>
+                    No exercises added yet.
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Add your first exercise above.
+                </p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition - TraceIt{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="mb-1">
+                Nutrition
+            </h2>
+
+            <p class="text-muted mb-0">
+                Track your daily food and nutrition intake.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('add_food') }}"
+            class="btn btn-primary"
+        >
+            + Add Food
+        </a>
+
+    </div>
+
+
+    <!-- Date Filter -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                action="{{ url_for('food') }}"
+                class="row g-3 align-items-end"
+            >
+
+                <div class="col-md-6">
+
+                    <label
+                        for="date"
+                        class="form-label"
+                    >
+                        Select Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        class="form-control"
+                        value="{{ selected_date }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button
+                        type="submit"
+                        class="btn btn-dark w-100"
+                    >
+                        View Nutrition
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Daily Nutrition Summary -->
+
+    <div class="row g-3 mb-4">
+
+        <!-- Calories -->
+
+        <div class="col-6 col-md-4 col-lg">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Calories
+                    </h6>
+
+                    <h4 class="mb-0">
+                        {{ "%.2f"|format(total_calories|float) }}
+                    </h4>
+
+                    {% if goal %}
+
+                        <small class="text-muted">
+                            Target:
+                            {{ goal.daily_calorie_target }}
+                            kcal
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Carbs -->
+
+        <div class="col-6 col-md-4 col-lg">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Carbs
+                    </h6>
+
+                    <h4 class="mb-0">
+                        {{ "%.2f"|format(total_carbs|float) }} g
+                    </h4>
+
+
+                    {% if goal %}
+                    <small class="text-muted">
+                        Target: {{ "%.1f"|format(goal["daily_carb_target"] or 0) }} g
+                    </small>
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Protein -->
+
+        <div class="col-6 col-md-4 col-lg">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Protein
+                    </h6>
+
+                    <h4 class="mb-0">
+                        {{ "%.2f"|format(total_protein|float) }} g
+                    </h4>
+
+                    {% if goal %}
+
+                        <small class="text-muted">
+                            Target:
+                            {{ "%.2f"|format(goal.daily_protein_target|float) }}
+                            g
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Fat -->
+
+        <div class="col-6 col-md-4 col-lg">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Fat
+                    </h6>
+
+                    <h4 class="mb-0">
+                        {{ "%.2f"|format(total_fat|float) }} g
+                    </h4>
+
+                    {% if goal %}
+                    <small class="text-muted">
+                        Target: {{ "%.1f"|format(goal["daily_fat_target"] or 0) }} g
+                    </small>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Fibre -->
+
+        <div class="col-6 col-md-4 col-lg">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Fibre
+                    </h6>
+
+                    <h4 class="mb-0">
+                        {{ "%.2f"|format(total_fiber|float) }} g
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Food Logs -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <h4 class="mb-0">
+                    Food Entries
+                </h4>
+
+                <span class="text-muted">
+                    {{ selected_date }}
+                </span>
+
+            </div>
+
+
+            {% if food_logs %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>
+                                    Food
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Calories
+                                </th>
+
+                                <th>
+                                    Carbs
+                                </th>
+
+                                <th>
+                                    Protein
+                                </th>
+
+                                <th>
+                                    Fat
+                                </th>
+
+                                <th>
+                                    Fibre
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for food in food_logs %}
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            {{ food.food_name }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.quantity_g|float) }}
+                                        g
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.calories|float) }}
+                                        kcal
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.carbs_g|float) }}
+                                        g
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.protein_g|float) }}
+                                        g
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.fat_g|float) }}
+                                        g
+                                    </td>
+
+                                    <td>
+                                        {{ "%.2f"|format(food.fiber_g|float) }}
+                                        g
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex gap-2">
+
+                                            <a
+                                                href="{{ url_for('edit_food', food_id=food.id) }}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Edit
+                                            </a>
+
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for('delete_food', food_id=food.id) }}"
+                                                onsubmit="return confirm('Are you sure you want to delete this food entry?');"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="text-center py-5">
+
+                    <h5>
+                        No food entries found
+                    </h5>
+
+                    <p class="text-muted">
+                        You haven't added any food for this date.
+                    </p>
+
+                    <a
+                        href="{{ url_for('add_food') }}"
+                        class="btn btn-primary"
+                    >
+                        Add Your First Food
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

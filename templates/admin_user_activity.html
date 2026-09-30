@@ -1,0 +1,1259 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+User Activity | TraceIt
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-4">
+
+
+    <!-- ==================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div
+        class="d-flex flex-column flex-md-row
+               justify-content-between
+               align-items-md-center
+               mb-4"
+    >
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                User Activity
+            </h1>
+
+            <p class="text-muted mb-0">
+
+                Viewing fitness activity for
+
+                <strong>
+                    {{ user.name }}
+                </strong>
+
+            </p>
+
+        </div>
+
+
+        <div class="mt-3 mt-md-0">
+
+            <a
+                href="{{ url_for('admin_dashboard') }}"
+                class="btn btn-outline-secondary"
+            >
+                ← Back to Admin
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         USER INFORMATION
+    ================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+                👤 User Information
+            </h4>
+
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Name
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ user.name }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Email
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ user.email }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <small class="text-muted">
+                        Joined
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ user.created_at.strftime("%Y-%m-%d") }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         FITNESS GOAL
+    ================================================== -->
+
+    {% if goal %}
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+                🎯 Fitness Goal
+            </h4>
+
+
+            <div class="row g-4">
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Age
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ goal.age }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Sex
+                    </small>
+
+                    <div class="fw-semibold text-capitalize">
+                        {{ goal.sex }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Height
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.height_cm) }} cm
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Starting Weight
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.starting_weight) }} kg
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Target Weight
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.target_weight) }} kg
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Goal Type
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ goal.goal_type }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Activity Level
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ goal.activity_level }}
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <small class="text-muted">
+                        Daily Calories
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ goal.daily_calorie_target }} kcal
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-4">
+
+                    <small class="text-muted">
+                        Protein Target
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.daily_protein_target) }} g
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-4">
+
+                    <small class="text-muted">
+                        Fat Target
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.daily_fat_target) }} g
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-md-4">
+
+                    <small class="text-muted">
+                        Carb Target
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ "%.2f"|format(goal.daily_carb_target) }} g
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-secondary">
+        This user has not created a fitness goal yet.
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- ==================================================
+         PROGRESS CHARTS
+    ================================================== -->
+
+    <div class="mb-4">
+
+        <div class="mb-3">
+
+            <h3 class="fw-bold mb-1">
+                📊 Progress Charts
+            </h3>
+
+            <p class="text-muted mb-0">
+                Visual overview of this user's fitness activity.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- Weight -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            ⚖️ Weight Progress
+                        </h5>
+
+                        {% if progress_dates %}
+
+                        <div style="height: 300px;">
+
+                            <canvas id="adminWeightChart"></canvas>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="text-muted text-center py-5">
+                            No weight data available.
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Calories -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            🔥 Calories & Protein
+                        </h5>
+
+                        {% if food_dates %}
+
+                        <div style="height: 300px;">
+
+                            <canvas id="adminNutritionChart"></canvas>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="text-muted text-center py-5">
+                            No nutrition data available.
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Water -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            💧 Water Intake
+                        </h5>
+
+                        {% if progress_dates %}
+
+                        <div style="height: 300px;">
+
+                            <canvas id="adminWaterChart"></canvas>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="text-muted text-center py-5">
+                            No water data available.
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Steps -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            🚶 Steps
+                        </h5>
+
+                        {% if progress_dates %}
+
+                        <div style="height: 300px;">
+
+                            <canvas id="adminStepsChart"></canvas>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="text-muted text-center py-5">
+                            No steps data available.
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Workout Frequency -->
+
+            <div class="col-12">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            🏋️ Workout Frequency
+                        </h5>
+
+                        {% if workout_dates %}
+
+                        <div style="height: 300px;">
+
+                            <canvas id="adminWorkoutChart"></canvas>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="text-muted text-center py-5">
+                            No workout data available.
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         DETAILED WORKOUTS
+    ================================================== -->
+
+    <div class="mb-4">
+
+        <div class="mb-3">
+
+            <h3 class="fw-bold mb-1">
+                🏋️ Detailed Workouts
+            </h3>
+
+            <p class="text-muted mb-0">
+                View workouts, exercises, sets, reps and weights.
+            </p>
+
+        </div>
+
+
+        {% if workouts %}
+
+            {% for workout in workouts %}
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body">
+
+
+                    <!-- Workout Header -->
+
+                    <div
+                        class="d-flex flex-column flex-md-row
+                               justify-content-between
+                               align-items-md-center
+                               mb-4"
+                    >
+
+                        <div>
+
+                            <h4 class="fw-bold mb-1">
+
+                                🏋️
+                                {{ workout.workout_name }}
+
+                            </h4>
+
+                            <div class="text-muted">
+
+                                📅
+                                {{ workout.workout_date }}
+
+                                <span class="mx-2">
+                                    |
+                                </span>
+
+                                ⏱️
+                                {{ workout.duration_minutes }}
+                                minutes
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Exercises -->
+
+                    {% if workout.exercises %}
+
+                        {% for exercise in workout.exercises %}
+
+                        <div
+                            class="border rounded p-3 mb-3"
+                        >
+
+                            <div
+                                class="d-flex
+                                       justify-content-between
+                                       align-items-center
+                                       mb-3"
+                            >
+
+                                <h5 class="fw-bold mb-0">
+
+                                    💪
+                                    {{ exercise.exercise_name }}
+
+                                </h5>
+
+                            </div>
+
+
+                            {% if exercise.sets %}
+
+                            <div class="table-responsive">
+
+                                <table
+                                    class="table table-sm
+                                           align-middle mb-0"
+                                >
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                Set
+                                            </th>
+
+                                            <th>
+                                                Reps
+                                            </th>
+
+                                            <th>
+                                                Weight
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                        {% for set in exercise.sets %}
+
+                                        <tr>
+
+                                            <td>
+
+                                                <span
+                                                    class="badge
+                                                           bg-primary"
+                                                >
+                                                    {{ set.set_number }}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+                                                {{ set.reps }}
+                                            </td>
+
+                                            <td>
+                                                {{ "%.2f"|format(set.weight_kg) }}
+                                                kg
+                                            </td>
+
+                                        </tr>
+
+                                        {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="text-muted small">
+                                No sets recorded for this exercise.
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                    <div class="text-muted">
+                        No exercises added to this workout.
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div class="fs-1 mb-3">
+                    🏋️
+                </div>
+
+                <p class="text-muted mb-0">
+                    No workouts recorded for this user.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ==================================================
+         DAILY PROGRESS
+    ================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h3 class="fw-bold mb-3">
+                📈 Daily Progress
+            </h3>
+
+
+            {% if progress_records %}
+
+            <div class="table-responsive">
+
+                <table
+                    class="table table-hover align-middle"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+                            <th>Weight</th>
+                            <th>BMI</th>
+                            <th>Water</th>
+                            <th>Sleep</th>
+                            <th>Steps</th>
+                            <th>Waist</th>
+                            <th>Chest</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for record in progress_records %}
+
+                        <tr>
+
+                            <td>
+                                {{ record.date }}
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(record.weight_kg) }}
+                                kg
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(record.bmi) }}
+                            </td>
+
+                            <td>
+                                {{ "%.1f"|format(record.water_liters) }}
+                                L
+                            </td>
+
+                            <td>
+                                {{ "%.1f"|format(record.sleep_hours) }}
+                                hrs
+                            </td>
+
+                            <td>
+                                {{ "{:,}".format(record.steps) }}
+                            </td>
+
+                            <td>
+
+                                {% if record.waist_cm %}
+                                    {{ "%.1f"|format(record.waist_cm) }} cm
+                                {% else %}
+                                    -
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if record.chest_cm %}
+                                    {{ "%.1f"|format(record.chest_cm) }} cm
+                                {% else %}
+                                    -
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="text-muted mb-0">
+                No daily progress records available.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         NUTRITION LOGS
+    ================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h3 class="fw-bold mb-3">
+                🍎 Nutrition Logs
+            </h3>
+
+
+            {% if food_logs %}
+
+            <div class="table-responsive">
+
+                <table
+                    class="table table-hover align-middle"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+                            <th>Food</th>
+                            <th>Quantity</th>
+                            <th>Calories</th>
+                            <th>Carbs</th>
+                            <th>Protein</th>
+                            <th>Fat</th>
+                            <th>Fibre</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for food in food_logs %}
+
+                        <tr>
+
+                            <td>
+                                {{ food.date }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ food.food_name }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ "%.1f"|format(food.quantity_g) }}
+                                g
+                            </td>
+
+                            <td>
+                                {{ "%.0f"|format(food.calories) }}
+                                kcal
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(food.carbs_g) }}
+                                g
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(food.protein_g) }}
+                                g
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(food.fat_g) }}
+                                g
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(food.fiber_g) }}
+                                g
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="text-muted mb-0">
+                No nutrition records available.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ==================================================
+     ADMIN USER CHARTS
+================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        // ==================================================
+        // WEIGHT CHART
+        // ==================================================
+
+        {% if progress_dates %}
+
+        const weightCanvas =
+            document.getElementById(
+                "adminWeightChart"
+            );
+
+        if (weightCanvas) {
+
+            new Chart(
+                weightCanvas,
+                {
+                    type: "line",
+
+                    data: {
+
+                        labels: {{ progress_dates | tojson }},
+
+                        datasets: [
+
+                            {
+                                label: "Weight (kg)",
+
+                                data: {{ weights | tojson }},
+
+                                tension: 0.3,
+
+                                fill: false
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+                                beginAtZero: false
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ==================================================
+        // WATER CHART
+        // ==================================================
+
+        const waterCanvas =
+            document.getElementById(
+                "adminWaterChart"
+            );
+
+        if (waterCanvas) {
+
+            new Chart(
+                waterCanvas,
+                {
+                    type: "line",
+
+                    data: {
+
+                        labels: {{ progress_dates | tojson }},
+
+                        datasets: [
+
+                            {
+                                label: "Water (L)",
+
+                                data: {{ water | tojson }},
+
+                                tension: 0.3,
+
+                                fill: false
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+                                beginAtZero: true
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ==================================================
+        // STEPS CHART
+        // ==================================================
+
+        const stepsCanvas =
+            document.getElementById(
+                "adminStepsChart"
+            );
+
+        if (stepsCanvas) {
+
+            new Chart(
+                stepsCanvas,
+                {
+                    type: "bar",
+
+                    data: {
+
+                        labels: {{ progress_dates | tojson }},
+
+                        datasets: [
+
+                            {
+                                label: "Steps",
+
+                                data: {{ steps | tojson }}
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+                                beginAtZero: true
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+        {% endif %}
+
+
+
+        // ==================================================
+        // NUTRITION CHART
+        // ==================================================
+
+        {% if food_dates %}
+
+        const nutritionCanvas =
+            document.getElementById(
+                "adminNutritionChart"
+            );
+
+        if (nutritionCanvas) {
+
+            new Chart(
+                nutritionCanvas,
+                {
+                    type: "line",
+
+                    data: {
+
+                        labels: {{ food_dates | tojson }},
+
+                        datasets: [
+
+                            {
+                                label: "Calories",
+
+                                data: {{ calories | tojson }},
+
+                                tension: 0.3,
+
+                                fill: false
+
+                            },
+
+                            {
+                                label: "Protein (g)",
+
+                                data: {{ protein | tojson }},
+
+                                tension: 0.3,
+
+                                fill: false
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false
+
+                    }
+
+                }
+            );
+
+        }
+
+        {% endif %}
+
+
+
+        // ==================================================
+        // WORKOUT FREQUENCY CHART
+        // ==================================================
+
+        {% if workout_dates %}
+
+        const workoutCanvas =
+            document.getElementById(
+                "adminWorkoutChart"
+            );
+
+        if (workoutCanvas) {
+
+            new Chart(
+                workoutCanvas,
+                {
+                    type: "bar",
+
+                    data: {
+
+                        labels: {{ workout_dates | tojson }},
+
+                        datasets: [
+
+                            {
+                                label: "Workouts",
+
+                                data: {{ workout_counts | tojson }}
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    stepSize: 1
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+        {% endif %}
+
+    }
+);
+
+</script>
+
+{% endblock %}

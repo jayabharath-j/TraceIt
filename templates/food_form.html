@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} - TraceIt{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7 col-md-9">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4">
+                        {{ page_title }}
+                    </h2>
+
+                    <form method="POST">
+
+                        <!-- Date -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="date"
+                                class="form-label"
+                            >
+                                Date
+                            </label>
+
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="date"
+                                name="date"
+                                value="{% if food %}{{ food.date }}{% else %}{{ request.args.get('date', '') }}{% endif %}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Food Item -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="food_name"
+                                class="form-label"
+                            >
+                                Food Item
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="food_name"
+                                name="food_name"
+                                required
+                            >
+
+                                <option value="">
+                                    Select food
+                                </option>
+
+                                {% for name in food_data.keys() %}
+
+                                    <option
+                                        value="{{ name }}"
+                                        {% if food and food.food_name == name %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ name }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Quantity -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="quantity_g"
+                                class="form-label"
+                            >
+                                Quantity (grams)
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="quantity_g"
+                                name="quantity_g"
+                                min="1"
+                                step="0.1"
+                                value="{% if food %}{{ food.quantity_g }}{% endif %}"
+                                placeholder="Example: 150"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Nutrition Preview -->
+
+                        <div class="card bg-light border mb-4">
+
+                            <div class="card-body">
+
+                                <h5 class="mb-3">
+                                    Nutrition
+                                </h5>
+
+                                <div class="row text-center">
+
+                                    <div class="col-6 col-md-4 mb-3">
+
+                                        <div class="fw-bold">
+                                            Calories
+                                        </div>
+
+                                        <div
+                                            id="calories"
+                                            class="fs-5"
+                                        >
+                                            0
+                                        </div>
+
+                                        <small class="text-muted">
+                                            kcal
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="col-6 col-md-4 mb-3">
+
+                                        <div class="fw-bold">
+                                            Carbs
+                                        </div>
+
+                                        <div
+                                            id="carbs"
+                                            class="fs-5"
+                                        >
+                                            0
+                                        </div>
+
+                                        <small class="text-muted">
+                                            g
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="col-6 col-md-4 mb-3">
+
+                                        <div class="fw-bold">
+                                            Protein
+                                        </div>
+
+                                        <div
+                                            id="protein"
+                                            class="fs-5"
+                                        >
+                                            0
+                                        </div>
+
+                                        <small class="text-muted">
+                                            g
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="col-6 col-md-4 mb-3">
+
+                                        <div class="fw-bold">
+                                            Fat
+                                        </div>
+
+                                        <div
+                                            id="fat"
+                                            class="fs-5"
+                                        >
+                                            0
+                                        </div>
+
+                                        <small class="text-muted">
+                                            g
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="col-6 col-md-4 mb-3">
+
+                                        <div class="fw-bold">
+                                            Fibre
+                                        </div>
+
+                                        <div
+                                            id="fiber"
+                                            class="fs-5"
+                                        >
+                                            0
+                                        </div>
+
+                                        <small class="text-muted">
+                                            g
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                {{ "Update Food" if food else "Add Food" }}
+                            </button>
+
+                            <a
+                                href="{{ url_for('food') }}"
+                                class="btn btn-secondary"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Nutrition Data -->
+
+<script>
+
+    const foodData = {{ food_data | tojson }};
+
+    const foodSelect = document.getElementById("food_name");
+
+    const quantityInput = document.getElementById("quantity_g");
+
+    const caloriesElement = document.getElementById("calories");
+
+    const carbsElement = document.getElementById("carbs");
+
+    const proteinElement = document.getElementById("protein");
+
+    const fatElement = document.getElementById("fat");
+
+    const fiberElement = document.getElementById("fiber");
+
+
+    function calculateNutrition() {
+
+        const foodName = foodSelect.value;
+
+        const quantity = parseFloat(quantityInput.value);
+
+
+        if (
+            !foodName ||
+            !quantity ||
+            quantity <= 0
+        ) {
+
+            caloriesElement.textContent = "0";
+            carbsElement.textContent = "0";
+            proteinElement.textContent = "0";
+            fatElement.textContent = "0";
+            fiberElement.textContent = "0";
+
+            return;
+
+        }
+
+
+        const food = foodData[foodName];
+
+        const multiplier = quantity / 100;
+
+
+        const calories =
+            food.calories * multiplier;
+
+        const carbs =
+            food.carbs * multiplier;
+
+        const protein =
+            food.protein * multiplier;
+
+        const fat =
+            food.fat * multiplier;
+
+        const fiber =
+            food.fiber * multiplier;
+
+
+        caloriesElement.textContent =
+            calories.toFixed(2);
+
+        carbsElement.textContent =
+            carbs.toFixed(2);
+
+        proteinElement.textContent =
+            protein.toFixed(2);
+
+        fatElement.textContent =
+            fat.toFixed(2);
+
+        fiberElement.textContent =
+            fiber.toFixed(2);
+
+    }
+
+
+    foodSelect.addEventListener(
+        "change",
+        calculateNutrition
+    );
+
+
+    quantityInput.addEventListener(
+        "input",
+        calculateNutrition
+    );
+
+
+    calculateNutrition();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_title }} | TraceIt
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h1 class="fw-bold">
+                        {{ page_title }}
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Record your daily fitness progress.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('progress') }}"
+                    class="btn btn-outline-secondary"
+                >
+                    Back
+                </a>
+
+            </div>
+
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <form method="POST">
+
+                        <!-- Date -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="date"
+                                class="form-control"
+                                value="{{ record.date if record else '' }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Weight -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Weight (kg)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0.01"
+                                name="weight_kg"
+                                class="form-control"
+                                value="{{ record.weight_kg if record else '' }}"
+                                placeholder="Example: 81.5"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Water -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Water (liters)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                name="water_liters"
+                                class="form-control"
+                                value="{{ record.water_liters if record else '' }}"
+                                placeholder="Example: 2.5"
+                            >
+
+                        </div>
+
+
+                        <!-- Sleep -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Sleep (hours)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                name="sleep_hours"
+                                class="form-control"
+                                value="{{ record.sleep_hours if record else '' }}"
+                                placeholder="Example: 7.5"
+                            >
+
+                        </div>
+
+
+                        <!-- Steps -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Steps
+                            </label>
+
+                            <input
+                                type="number"
+                                min="0"
+                                name="steps"
+                                class="form-control"
+                                value="{{ record.steps if record else '' }}"
+                                placeholder="Example: 8000"
+                            >
+
+                        </div>
+
+
+                        <!-- Waist -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Waist (cm)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                name="waist_cm"
+                                class="form-control"
+                                value="{{ record.waist_cm if record else '' }}"
+                                placeholder="Optional"
+                            >
+
+                        </div>
+
+
+                        <!-- Chest -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Chest (cm)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                name="chest_cm"
+                                class="form-control"
+                                value="{{ record.chest_cm if record else '' }}"
+                                placeholder="Optional"
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >
+                            Save Progress
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,645 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Progress Charts | TraceIt
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-4">
+
+
+    <!-- ==============================
+         PAGE HEADER
+    =============================== -->
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold">
+            Progress Charts
+        </h1>
+
+        <p class="text-muted">
+            Track your fitness progress over time.
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         WEIGHT CHART
+    =============================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5 class="card-title fw-bold mb-3">
+                Weight Progress
+            </h5>
+
+            <div style="height: 350px;">
+
+                <canvas id="weightChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         CALORIE + PROTEIN
+    =============================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- Calories -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title fw-bold mb-3">
+                        Calorie Intake
+                    </h5>
+
+                    <div style="height: 300px;">
+
+                        <canvas id="calorieChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Protein -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title fw-bold mb-3">
+                        Protein Intake
+                    </h5>
+
+                    <div style="height: 300px;">
+
+                        <canvas id="proteinChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         WATER + STEPS
+    =============================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- Water -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title fw-bold mb-3">
+                        Water Intake
+                    </h5>
+
+                    <div style="height: 300px;">
+
+                        <canvas id="waterChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Steps -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title fw-bold mb-3">
+                        Daily Steps
+                    </h5>
+
+                    <div style="height: 300px;">
+
+                        <canvas id="stepsChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         WORKOUT FREQUENCY
+    =============================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5 class="card-title fw-bold mb-3">
+                Workout Frequency
+            </h5>
+
+            <div style="height: 350px;">
+
+                <canvas id="workoutChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- ==========================================
+     CHART DATA FROM FLASK
+=========================================== -->
+
+<script>
+
+    const progressDates =
+        {{ progress_dates | tojson }};
+
+    const weights =
+        {{ weights | tojson }};
+
+    const water =
+        {{ water | tojson }};
+
+    const steps =
+        {{ steps | tojson }};
+
+
+    const foodDates =
+        {{ food_dates | tojson }};
+
+    const calories =
+        {{ calories | tojson }};
+
+    const protein =
+        {{ protein | tojson }};
+
+
+    const workoutDates =
+        {{ workout_dates | tojson }};
+
+    const workoutCounts =
+        {{ workout_counts | tojson }};
+
+
+</script>
+
+
+<!-- ==========================================
+     CHART JAVASCRIPT
+=========================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        // =====================================
+        // WEIGHT CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("weightChart"),
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: progressDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Weight (kg)",
+
+                            data: weights,
+
+                            borderWidth: 3,
+
+                            tension: 0.3,
+
+                            fill: false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: false,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Weight (kg)"
+
+                            }
+
+                        },
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "Date"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // CALORIE CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("calorieChart"),
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels: foodDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Calories",
+
+                            data: calories,
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Calories"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // PROTEIN CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("proteinChart"),
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: foodDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Protein (g)",
+
+                            data: protein,
+
+                            borderWidth: 3,
+
+                            tension: 0.3,
+
+                            fill: false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Protein (g)"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // WATER CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("waterChart"),
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels: progressDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Water (Liters)",
+
+                            data: water,
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Liters"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // STEPS CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("stepsChart"),
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: progressDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Steps",
+
+                            data: steps,
+
+                            borderWidth: 3,
+
+                            tension: 0.3,
+
+                            fill: false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Steps"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+        // =====================================
+        // WORKOUT FREQUENCY CHART
+        // =====================================
+
+        new Chart(
+            document.getElementById("workoutChart"),
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels: workoutDates,
+
+                    datasets: [
+
+                        {
+
+                            label: "Workouts",
+
+                            data: workoutCounts,
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                stepSize: 1
+
+                            },
+
+                            title: {
+
+                                display: true,
+
+                                text: "Number of Workouts"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+    }
+
+);
+
+</script>
+
+{% endblock %}
