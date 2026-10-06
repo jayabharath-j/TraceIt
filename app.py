@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import mysql.connector
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from datetime import date, datetime
 
 from config import Config
@@ -23,11 +24,12 @@ app.config.from_object(Config)
 
 def get_db_connection():
 
-    connection = mysql.connector.connect(
+    connection = psycopg2.connect(
         host=app.config["DB_HOST"],
+        port=app.config.get("DB_PORT", 5432),
         user=app.config["DB_USER"],
         password=app.config["DB_PASSWORD"],
-        database=app.config["DB_NAME"]
+        dbname=app.config["DB_NAME"]
     )
 
     return connection
@@ -48,7 +50,7 @@ def admin_dashboard():
         return redirect(url_for("dashboard"))
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -104,7 +106,7 @@ def admin_dashboard():
         )
         users = cursor.fetchall()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         cursor.close()
         connection.close()
@@ -182,7 +184,7 @@ def admin_delete_user(user_id):
                 "success"
             )
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -231,7 +233,7 @@ def admin_user_activity(user_id):
 
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
 
     try:
@@ -577,7 +579,7 @@ def admin_user_activity(user_id):
         ]
 
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         cursor.close()
         connection.close()
@@ -738,7 +740,7 @@ def login():
 
         connection = get_db_connection()
 
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
 
         cursor.execute(
             """
@@ -805,7 +807,7 @@ def dashboard():
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -913,7 +915,7 @@ def dashboard():
 
         recent_workouts = cursor.fetchall()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         cursor.close()
         connection.close()
@@ -1163,7 +1165,7 @@ def charts():
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -1229,7 +1231,7 @@ def charts():
         workout_data = cursor.fetchall()
 
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         flash(
             "Unable to load chart data. Please try again.",
@@ -1329,7 +1331,7 @@ def goals():
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     # =========================
     # SAVE / UPDATE GOALS
@@ -1690,7 +1692,7 @@ def progress():
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute(
         """
@@ -1799,7 +1801,7 @@ def add_progress():
             return redirect(url_for("add_progress"))
 
         connection = get_db_connection()
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
 
         # Get user's height
 
@@ -1884,7 +1886,7 @@ def add_progress():
 
             connection.commit()
 
-        except mysql.connector.IntegrityError:
+        except psycopg2.IntegrityError:
 
             connection.rollback()
 
@@ -1937,7 +1939,7 @@ def edit_progress(progress_id):
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     # IMPORTANT:
     # progress_id AND user_id are checked together.
@@ -2111,7 +2113,7 @@ def edit_progress(progress_id):
 
             connection.commit()
 
-        except mysql.connector.IntegrityError:
+        except psycopg2.IntegrityError:
 
             connection.rollback()
 
@@ -2255,7 +2257,7 @@ def food():
         )
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     # Get food entries for selected date
 
@@ -2530,7 +2532,7 @@ def add_food():
 
             connection.commit()
 
-        except mysql.connector.Error:
+        except psycopg2.Error:
 
             connection.rollback()
 
@@ -2589,7 +2591,7 @@ def edit_food(food_id):
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     # IMPORTANT:
     # food_id AND user_id are checked together.
@@ -2799,7 +2801,7 @@ def edit_food(food_id):
 
             connection.commit()
 
-        except mysql.connector.Error:
+        except psycopg2.Error:
 
             connection.rollback()
 
@@ -2927,7 +2929,7 @@ def workouts():
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -2950,7 +2952,7 @@ def workouts():
 
         workout_list = cursor.fetchall()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         flash(
             "Unable to load workouts. Please try again.",
@@ -3111,11 +3113,12 @@ def add_workout():
                 )
             )
 
+            cursor.execute("SELECT LASTVAL() AS id")
+            workout_id = cursor.fetchone()["id"]
+
             connection.commit()
 
-            workout_id = cursor.lastrowid
-
-        except mysql.connector.Error:
+        except psycopg2.Error:
 
             connection.rollback()
 
@@ -3174,7 +3177,7 @@ def workout_detail(workout_id):
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -3260,7 +3263,7 @@ def workout_detail(workout_id):
 
             exercise["sets"] = cursor.fetchall()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         cursor.close()
         connection.close()
@@ -3333,7 +3336,7 @@ def delete_workout(workout_id):
 
         deleted_rows = cursor.rowcount
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -3426,7 +3429,7 @@ def add_exercise(workout_id):
         )
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -3486,7 +3489,7 @@ def add_exercise(workout_id):
 
         connection.commit()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -3543,7 +3546,7 @@ def delete_exercise(exercise_id):
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -3599,7 +3602,7 @@ def delete_exercise(exercise_id):
 
         connection.commit()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -3711,7 +3714,7 @@ def add_exercise_set(exercise_id):
         )
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -3805,7 +3808,7 @@ def add_exercise_set(exercise_id):
 
         connection.commit()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -3900,7 +3903,7 @@ def edit_exercise_set(set_id):
         )
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -3966,7 +3969,7 @@ def edit_exercise_set(set_id):
 
         connection.commit()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
@@ -4023,7 +4026,7 @@ def delete_exercise_set(set_id):
     user_id = session["user_id"]
 
     connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
 
     try:
 
@@ -4081,7 +4084,7 @@ def delete_exercise_set(set_id):
 
         connection.commit()
 
-    except mysql.connector.Error:
+    except psycopg2.Error:
 
         connection.rollback()
 
