@@ -3,6 +3,12 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, datetime
 
+import csv
+import io
+import zipfile
+
+from flask import send_file
+
 from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -4117,6 +4123,225 @@ def delete_exercise_set(set_id):
             workout_id=workout_id
         )
     )
+
+
+
+# ==================================================
+# DOWNLOAD USER DATA BACKUP
+# ==================================================
+
+@app.route("/download-backup")
+def download_backup():
+
+    # Check login
+    if "user_id" not in session:
+        flash("Please login first.", "warning")
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
+
+        # CSV files will be stored in memory
+        zip_buffer = io.BytesIO()
+
+        with zipfile.ZipFile(
+            zip_buffer,
+            "w",
+            zipfile.ZIP_DEFLATED
+        ) as backup_zip:
+
+            # Helper function to create CSV files
+            def add_csv(filename, headers, rows):
+
+                csv_buffer = io.StringIO()
+                writer = csv.writer(csv_buffer)
+
+                writer.writerow(headers)
+
+                for row in rows:
+                    writer.writerow([
+                        row.get(header) for header in headers
+                    ])
+
+                backup_zip.writestr(
+                    filename,
+                    "\ufeff" + csv_buffer.getvalue()
+                )
+
+            # 1. Fitness goals
+            cursor.execute("""
+                SELECT
+                    id, age, sex, height_cm,
+                    starting_weight, target_weight,
+                    goal_type, activity_level,
+                    daily_calorie_target,
+                    daily_protein_target,
+                    daily_fat_target,
+                    daily_carb_target
+                FROM fitness_goals
+                WHERE user_id = %s
+                ORDER BY id
+            """, (user_id,))
+
+            add_csv(
+                "fitness_goals.csv",
+                [
+                    "id", "age", "sex", "height_cm",
+                    "starting_weight", "target_weight",
+                    "goal_type", "activity_level",
+                    "daily_calorie_target",
+                    "daily_protein_target",
+                    "daily_fat_target",
+                    "daily_carb_target"
+                ],
+                cursor.fetchall()
+            )
+
+            # 2. Daily progress
+            cursor.execute("""
+                SELECT
+                    id, date, weight_kg, bmi,
+                    water_liters, sleep_hours,
+                    steps, waist_cm, chest_cm
+                FROM daily_progress
+                WHERE user_id = %s
+                ORDER BY date
+            """, (user_id,))
+
+            add_csv(
+                "daily_progress.csv",
+                [
+                    "id", "date", "weight_kg", "bmi",
+                    "water_liters", "sleep_hours",
+                    "steps", "waist_cm", "chest_cm"
+                ],
+                cursor.fetchall()
+            )
+
+            # 3. Food logs
+            cursor.execute("""
+                SELECT
+                    id, date, food_name, quantity_g,
+                    calories, carbs_g, protein_g,
+                    fat_g, fiber_g
+                FROM food_logs
+                WHERE user_id = %s
+                ORDER BY date, id
+            """, (user_id,))
+
+            add_csv(
+                "food_logs.csv",
+                [
+                    "id", "date", "food_name", "quantity_g",
+                    "calories", "carbs_g", "protein_g",
+                    "fat_g", "fiber_g"
+                ],
+                cursor.fetchall()
+            )
+
+            # 4. Workouts
+            cursor.execute("""
+                SELECT
+                    id, workout_date,
+                    workout_name, duration_minutes
+                FROM workouts
+                WHERE user_id = %s
+                ORDER BY workout_date, id
+            """, (user_id,))
+
+            add_csv(
+                "workouts.csv",
+                [
+                    "id", "workout_date",
+                    "workout_name", "duration_minutes"
+                ],
+                cursor.fetchall()
+            )
+
+            # 5. Exercises
+            cursor.execute("""
+                SELECT
+                    exercises.id,
+                    exercises.workout_id,
+                    exercises.exercise_name
+                FROM exercises
+                INNER JOIN workouts
+                    ON exercises.workout_id = workouts.id
+                WHERE workouts.user_id = %s
+                ORDER BY exercises.id
+            """, (user_id,))
+
+            add_csv(
+                "exercises.csv",
+                ["id", "workout_id", "exercise_name"],
+                cursor.fetchall()
+            )
+
+            # 6. Exercise sets
+            cursor.execute("""
+                SELECT
+                    exercise_sets.id,
+                    exercise_sets.exercise_id,
+                    exercise_sets.set_number,
+                    exercise_sets.reps,
+                    exercise_sets.weight_kg
+                FROM exercise_sets
+                INNER JOIN exercises
+                    ON exercise_sets.exercise_id = exercises.id
+                INNER JOIN workouts
+                    ON exercises.workout_id = workouts.id
+                WHERE workouts.user_id = %s
+                ORDER BY exercise_sets.id
+            """, (user_id,))
+
+            add_csv(
+                "exercise_sets.csv",
+                [
+                    "id", "exercise_id",
+                    "set_number", "reps", "weight_kg"
+                ],
+                cursor.fetchall()
+            )
+
+            # Backup information
+            backup_zip.writestr(
+                "README.txt",
+                "TraceIt Personal Data Backup\n"
+                "This ZIP contains your fitness goals, "
+                "daily progress, food logs, workouts, "
+                "exercises and exercise sets.\n"
+                "Generated by TraceIt.\n"
+            )
+
+        zip_buffer.seek(0)
+
+        return send_file(
+            zip_buffer,
+            mimetype="application/zip",
+            as_attachment=True,
+            download_name=f"TraceIt_Backup_{date.today()}.zip"
+        )
+
+    except Exception:
+        app.logger.exception("Backup generation failed")
+        flash(
+            "Unable to generate backup. Please try again.",
+            "danger"
+        )
+        return redirect(url_for("dashboard"))
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection:
+            connection.close()
 
 
 # =========================
