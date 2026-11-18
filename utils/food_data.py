@@ -45,6 +45,7 @@ FOOD_DATA = {
     'Ragi Kali': {'calories': 110, 'carbs': 23, 'protein': 3, 'fat': 0.8, 'fiber': 3},
     'Puttu': {'calories': 180, 'carbs': 34, 'protein': 3, 'fat': 4, 'fiber': 3},
     'Kanchipuram Idli': {'calories': 165, 'carbs': 27, 'protein': 5, 'fat': 4, 'fiber': 2},
+    "Wheat Dosa": {"calories": 180,"carbs": 29.0,"protein": 5.5,"fat": 4.5,"fiber": 3.5},
 
     # Rice and grains
     'Brown Rice (cooked)': {'calories': 123, 'carbs': 25.6, 'protein': 2.7, 'fat': 1, 'fiber': 1.6},
@@ -335,6 +336,12 @@ FOOD_DATA = {
     'Vanilla Ice Cream': {'calories': 207, 'carbs': 24, 'protein': 3.5, 'fat': 11, 'fiber': 0.7},
     'Chocolate Cake': {'calories': 370, 'carbs': 53, 'protein': 5, 'fat': 16, 'fiber': 2},
     'Dark Chocolate': {'calories': 598, 'carbs': 46, 'protein': 7.8, 'fat': 43, 'fiber': 11},
+    "Chocolate Brownie": {"calories": 466,"carbs": 50.0,"protein": 6.0,"fat": 29.0,"fiber": 2.5},
+    "Walnut Brownie": {"calories": 480,"carbs": 48.0,"protein": 7.0,"fat": 30.0,"fiber": 3.5},
+    "KitKat": {"calories": 518,"carbs": 64.0,"protein": 6.5,"fat": 26.0,"fiber": 2.0},
+    "Cadbury Dairy Milk": {"calories": 535,"carbs": 57.0,"protein": 8.0,"fat": 30.0,"fiber": 2.0},
+    "Milkybar": {"calories": 540,"carbs": 60.0,"protein": 8.0,"fat": 30.0,"fiber": 0},
+
 
     # Drinks (per 100 g)
     'Water': {'calories': 0, 'carbs': 0, 'protein': 0, 'fat': 0, 'fiber': 0},
@@ -374,4 +381,74 @@ FOOD_DATA = {
     'Sunflower Seeds': {'calories': 584, 'carbs': 20, 'protein': 20.8, 'fat': 51.5, 'fiber': 8.6},
     'Chia Seeds': {'calories': 486, 'carbs': 42.1, 'protein': 16.5, 'fat': 30.7, 'fiber': 34.4},
     'Flax Seeds': {'calories': 534, 'carbs': 28.9, 'protein': 18.3, 'fat': 42.2, 'fiber': 27.3},
+
+        # BREAD AND SANDWICHES
+
+    "Wheat Bread": {
+        "calories": 247,
+        "carbs": 41.2,
+        "protein": 12.5,
+        "fat": 3.4,
+        "fiber": 6.8
+    },
+
+    "White Bread": {
+        "calories": 265,
+        "carbs": 49.0,
+        "protein": 9.0,
+        "fat": 3.2,
+        "fiber": 2.7
+    },
+
+    "Brown Bread": {
+        "calories": 250,
+        "carbs": 45.0,
+        "protein": 9.5,
+        "fat": 3.5,
+        "fiber": 5.0
+    },
+
+    "Multigrain Bread": {
+        "calories": 265,
+        "carbs": 43.0,
+        "protein": 13.0,
+        "fat": 4.2,
+        "fiber": 7.4
+    },
+
+    "Milk Bread": {
+        "calories": 285,
+        "carbs": 48.0,
+        "protein": 8.0,
+        "fat": 6.8,
+        "fiber": 2.0
+    },
+
+    "Bread Omelette": {
+        "calories": 250,
+        "carbs": 25.0,
+        "protein": 10.5,
+        "fat": 12.0,
+        "fiber": 1.5
+    },
+
+    "Egg Sandwich": {
+        "calories": 240,
+        "carbs": 24.0,
+        "protein": 11.0,
+        "fat": 11.0,
+        "fiber": 1.8
+    },
+
+    "Vegetable Sandwich": {
+        "calories": 180,
+        "carbs": 28.0,
+        "protein": 5.0,
+        "fat": 5.3,
+        "fiber": 3.0
+    },
+
 }
+
+
+
