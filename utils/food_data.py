@@ -341,6 +341,8 @@ FOOD_DATA = {
     "KitKat": {"calories": 518,"carbs": 64.0,"protein": 6.5,"fat": 26.0,"fiber": 2.0},
     "Cadbury Dairy Milk": {"calories": 535,"carbs": 57.0,"protein": 8.0,"fat": 30.0,"fiber": 2.0},
     "Milkybar": {"calories": 540,"carbs": 60.0,"protein": 8.0,"fat": 30.0,"fiber": 0},
+    "Peanut Butter": {"calories": 588,"carbs": 20.0,"protein": 25.0,"fat": 50.0,"fiber": 6.0},
+    "Chocolate Peanut Butter": {"calories": 590,"carbs": 28.0,"protein": 22.0,"fat": 46.0,"fiber": 5.0},
 
 
     # Drinks (per 100 g)
