@@ -228,6 +228,7 @@ FOOD_DATA = {
     'Banana Flower (cooked)': {'calories': 45, 'carbs': 8, 'protein': 2, 'fat': 0.5, 'fiber': 4},
     'Banana Stem (cooked)': {'calories': 25, 'carbs': 5, 'protein': 0.7, 'fat': 0.2, 'fiber': 3},
     'Garlic (raw)': {'calories': 149, 'carbs': 33, 'protein': 6.4, 'fat': 0.5, 'fiber': 2.1},
+    "Kovakkai Poriyal": {"calories": 85,"carbs": 7.0,"protein": 2.0,"fat": 5.5,"fiber": 3.0},
 
     # Fruits
     'Orange': {'calories': 47, 'carbs': 11.8, 'protein': 0.9, 'fat': 0.1, 'fiber': 2.4},
@@ -386,69 +387,14 @@ FOOD_DATA = {
 
         # BREAD AND SANDWICHES
 
-    "Wheat Bread": {
-        "calories": 247,
-        "carbs": 41.2,
-        "protein": 12.5,
-        "fat": 3.4,
-        "fiber": 6.8
-    },
-
-    "White Bread": {
-        "calories": 265,
-        "carbs": 49.0,
-        "protein": 9.0,
-        "fat": 3.2,
-        "fiber": 2.7
-    },
-
-    "Brown Bread": {
-        "calories": 250,
-        "carbs": 45.0,
-        "protein": 9.5,
-        "fat": 3.5,
-        "fiber": 5.0
-    },
-
-    "Multigrain Bread": {
-        "calories": 265,
-        "carbs": 43.0,
-        "protein": 13.0,
-        "fat": 4.2,
-        "fiber": 7.4
-    },
-
-    "Milk Bread": {
-        "calories": 285,
-        "carbs": 48.0,
-        "protein": 8.0,
-        "fat": 6.8,
-        "fiber": 2.0
-    },
-
-    "Bread Omelette": {
-        "calories": 250,
-        "carbs": 25.0,
-        "protein": 10.5,
-        "fat": 12.0,
-        "fiber": 1.5
-    },
-
-    "Egg Sandwich": {
-        "calories": 240,
-        "carbs": 24.0,
-        "protein": 11.0,
-        "fat": 11.0,
-        "fiber": 1.8
-    },
-
-    "Vegetable Sandwich": {
-        "calories": 180,
-        "carbs": 28.0,
-        "protein": 5.0,
-        "fat": 5.3,
-        "fiber": 3.0
-    },
+    "Wheat Bread": {"calories": 247,"carbs": 41.2,"protein": 12.5,"fat": 3.4,"fiber": 6.8},
+    "White Bread": {"calories": 265,"carbs": 49.0,"protein": 9.0,"fat": 3.2,"fiber": 2.7},
+    "Brown Bread": {"calories": 250,"carbs": 45.0,"protein": 9.5,"fat": 3.5,"fiber": 5.0},
+    "Multigrain Bread": {"calories": 265,"carbs": 43.0,"protein": 13.0,"fat": 4.2,"fiber": 7.4},
+    "Milk Bread": {"calories": 285,"carbs": 48.0,"protein": 8.0,"fat": 6.8,"fiber": 2.0},
+    "Bread Omelette": {"calories": 250,"carbs": 25.0,"protein": 10.5,"fat": 12.0,"fiber": 1.5},
+    "Egg Sandwich": {"calories": 240,"carbs": 24.0,"protein": 11.0,"fat": 11.0,"fiber": 1.8},
+    "Vegetable Sandwich": {"calories": 180,"carbs": 28.0,"protein": 5.0,"fat": 5.3,"fiber": 3.0},
 
 }
 
