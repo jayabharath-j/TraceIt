@@ -127,6 +127,7 @@ FOOD_DATA = {
     'Mint Chutney': {'calories': 60, 'carbs': 9, 'protein': 2, 'fat': 2, 'fiber': 3},
     'Peanut Chutney': {'calories': 250, 'carbs': 12, 'protein': 10, 'fat': 18, 'fiber': 4},
     'Onion Chutney': {'calories': 95, 'carbs': 13, 'protein': 2, 'fat': 4, 'fiber': 2},
+    "Velarikai Kolambu": {"calories": 65,"carbs": 7.0,"protein": 2.0,"fat": 3.3,"fiber": 1.5},
 
     # Meat and seafood
     'Chicken Thigh (roasted)': {'calories': 209, 'carbs': 0, 'protein': 26, 'fat': 11, 'fiber': 0},
@@ -315,6 +316,9 @@ FOOD_DATA = {
     'Chicken Pizza': {'calories': 260, 'carbs': 29, 'protein': 15, 'fat': 10, 'fiber': 2},
     'Vegetable Burger': {'calories': 240, 'carbs': 34, 'protein': 8, 'fat': 8, 'fiber': 3},
     'Chicken Burger': {'calories': 260, 'carbs': 30, 'protein': 15, 'fat': 10, 'fiber': 2},
+    "Banana Cake": {"calories": 325,"carbs": 50.0,"protein": 4.5,"fat": 12.0,"fiber": 1.8},
+
+
 
     # Sweets
     'Gulab Jamun': {'calories': 330, 'carbs': 49, 'protein': 5, 'fat': 13, 'fiber': 0.5},
