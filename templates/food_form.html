@@ -47,21 +47,8 @@
 
                 {% for name in food_data.keys() %}
 
-                <option
-                  value="{{ name }}"
-                  {%
-                  if
-                  food
-                  and
-                  food.food_name=""
-                  ="name"
-                  %}
-                  selected
-                  {%
-                  endif
-                  %}
-                >
-                  {{ name }}
+                <option value="{{ name }}" {% if food and food.food_name == name %}selected{% endif %}>
+                {{ name }}
                 </option>
 
                 {% endfor %}
