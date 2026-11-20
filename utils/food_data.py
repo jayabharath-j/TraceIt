@@ -400,6 +400,38 @@ FOOD_DATA = {
     "Egg Sandwich": {"calories": 240,"carbs": 24.0,"protein": 11.0,"fat": 11.0,"fiber": 1.8},
     "Vegetable Sandwich": {"calories": 180,"carbs": 28.0,"protein": 5.0,"fat": 5.3,"fiber": 3.0},
 
+    'Karasev': {
+    'calories': 525,
+    'carbs': 55,
+    'protein': 10,
+    'fat': 30,
+    'fiber': 4
+},
+
+'Lady Finger Poriyal': {
+    'calories': 80,
+    'carbs': 8,
+    'protein': 2,
+    'fat': 4.5,
+    'fiber': 3.2
+},
+
+'Zero Oil Omelette': {
+    'calories': 144,
+    'carbs': 0.7,
+    'protein': 12.6,
+    'fat': 9.6,
+    'fiber': 0
+},
+
+'Go Zero French Vanilla Ice Cream': {
+    'calories': 91,
+    'carbs': 15.6,
+    'protein': 2.4,
+    'fat': 4.8,
+    'fiber': 2.9
+},
+
 }
 
 
