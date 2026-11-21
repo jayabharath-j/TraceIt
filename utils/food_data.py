@@ -432,6 +432,32 @@ FOOD_DATA = {
     'fiber': 2.9
 },
 
+
+'Avarakkai Poriyal': {
+    'calories': 80,
+    'carbs': 8.8,
+    'protein': 2.5,
+    'fat': 4,
+    'fiber': 3.5
+},
+
+'Cornetto Double Chocolate': {
+    'calories': 313,
+    'carbs': 40,
+    'protein': 5.5,
+    'fat': 15,
+    'fiber': 2.7
+},
+
+'Tomato Thokku': {
+    'calories': 130,
+    'carbs': 12,
+    'protein': 3,
+    'fat': 8,
+    'fiber': 2.5
+},
+
+
 }
 
 
